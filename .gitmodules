@@ -1,0 +1,3 @@
+[submodule "nga-kupu"]
+	path = nga-kupu
+	url = git@github.com:TeHikuMedia/nga-kupu.git
