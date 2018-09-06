@@ -11,13 +11,14 @@ jupyter: USER=root
 jupyter: GROUP=root
 jupyter: 
 	$(RUN) \
-		-p 8888:$(JUPYTER_PORT) \
+		-p $(JUPYTER_PORT):$(JUPYTER_PORT) \
 		-e NB_USER=$$USER \
 		-e NB_UID=$(shell id -u) \
 		-e NB_GID=$(shell id -g) \
 		$(IMAGE)  \
 		jupyter lab \
 		--allow-root \
+		--port $(JUPYTER_PORT) \
 		--NotebookApp.password=$(shell $(RUN_IMAGE) \
 			python -c \
 			"from IPython.lib import passwd; print(passwd('$(JUPYTER_PASSWORD)'))"\
