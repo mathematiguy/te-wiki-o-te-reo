@@ -28,7 +28,7 @@ docutils==0.14
 entrypoints==0.2.3
 fastcache==1.0.2
 gensim==3.5.0
-git+http://github.com/TeHikuMedia/nga-kupu.git@4101e39a617ee79580eb39574f44fe683f5ebbcb#egg=taumahi
+git+http://github.com/TeHikuMedia/nga-kupu.git@ignore_punctuation#egg=taumahi
 h5py==2.6.0
 heapdict==1.0.0
 html5lib==1.0.1
