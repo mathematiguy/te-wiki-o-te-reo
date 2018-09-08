@@ -11,5 +11,8 @@ RUN python -m nltk.downloader all
 COPY requirements.txt /root/requirements.txt
 RUN pip install -r /root/requirements.txt
 
+# Update taumahi library
+RUN pip install git+http://github.com/TeHikuMedia/nga-kupu.git@2b350fd87b7dfd02d73eca23d520f6e74e8769f6#egg=taumahi
+
 # Login as $NB_UID
 USER $NB_UID
