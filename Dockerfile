@@ -12,7 +12,7 @@ COPY requirements.txt /root/requirements.txt
 RUN pip install -r /root/requirements.txt
 
 # Update taumahi library
-RUN pip install git+http://github.com/TeHikuMedia/nga-kupu.git@11b465b426c4abc791ad86646c0fdd833a790dd6#egg=taumahi
+RUN pip install git+http://github.com/TeHikuMedia/nga-kupu.git@206510e241495de25b6892467ca47416fc845a68#egg=taumahi
 
 # Login as $NB_UID
 USER $NB_UID
