@@ -1,8 +1,9 @@
 IMAGE := mathematiguy/te-wiki-o-te-reo
 USER  ?= $$(id -u)
 GROUP ?= $$(id -g)
+TAG ?= latest
 RUN ?= docker run -it --rm -v $$(pwd):/work -w /work -u $(USER):$(GROUP)
-RUN_IMAGE ?= $(RUN) $(IMAGE)
+RUN_IMAGE ?= $(RUN) $(IMAGE):$(TAG)
 
 JUPYTER_PASSWORD ?= jupyter
 JUPYTER_PORT ?= 8888
@@ -16,7 +17,7 @@ jupyter:
 		-e NB_UID=$(shell id -u) \
 		-e NB_GID=$(shell id -g) \
 		$(IMAGE)  \
-		jupyter lab \
+		jupyter notebook \
 		--allow-root \
 		--port $(JUPYTER_PORT) \
 		--NotebookApp.password=$(shell $(RUN_IMAGE) \
