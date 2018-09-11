@@ -17,7 +17,7 @@ jupyter:
 		-e NB_UID=$(shell id -u) \
 		-e NB_GID=$(shell id -g) \
 		$(IMAGE)  \
-		jupyter notebook \
+		jupyter lab \
 		--allow-root \
 		--port $(JUPYTER_PORT) \
 		--NotebookApp.password=$(shell $(RUN_IMAGE) \
