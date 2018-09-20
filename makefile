@@ -1,19 +1,25 @@
 IMAGE := mathematiguy/te-wiki-o-te-reo
-USER  ?= $$(id -u)
-GROUP ?= $$(id -g)
+UID ?= $$(id -u)
+GID ?= $$(id -g)
 TAG ?= latest
-RUN ?= docker run -it --rm -v $$(pwd):/work -w /work -u $(USER):$(GROUP)
+RUN ?= docker run -it --rm $(PORT) -v $$(pwd):/work -w /work -u $(UID):$(GID)
 RUN_IMAGE ?= $(RUN) $(IMAGE):$(TAG)
+PORT ?=
+
+web_server: PAGE=d3-zoom
+web_server: PORT=-p 8000:8000
+web_server:
+	(cd D3/$(PAGE) && $(RUN_IMAGE) python3 -m http.server)
 
 JUPYTER_PASSWORD ?= jupyter
 JUPYTER_PORT ?= 8888
 .PHONY: jupyter
-jupyter: USER=root
-jupyter: GROUP=root
+jupyter: UID=root
+jupyter: GID=root
 jupyter: 
 	$(RUN) \
 		-p $(JUPYTER_PORT):$(JUPYTER_PORT) \
-		-e NB_USER=$$USER \
+		-e NB_UID=$$UID \
 		-e NB_UID=$(shell id -u) \
 		-e NB_GID=$(shell id -g) \
 		$(IMAGE)  \
@@ -30,14 +36,14 @@ docker:
 	docker build --tag $(IMAGE):latest .
 
 .PHONY: enter
-enter: USER = root
-enter: GROUP = root
+enter: UID = root
+enter: GID = root
 enter:
 	$(RUN_IMAGE) bash
 
 inspect_variables:
 	@echo IMAGE:     $(IMAGE)
-	@echo USER:      $(USER)
-	@echo GROUP:     $(GROUP)
+	@echo UID:      $(UID)
+	@echo GID:     $(GID)
 	@echo RUN:       $(RUN)
 	@echo RUN_IMAGE: $(RUN_IMAGE)

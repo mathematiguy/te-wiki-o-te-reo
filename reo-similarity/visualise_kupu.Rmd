@@ -1,0 +1,98 @@
+---
+title: "visualise_kupu.Rmd"
+author: "Caleb Moses"
+date: "11 September 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+```
+
+```{r}
+dist_matrix <- read_csv("data/dist_matrix.csv")
+```
+
+```{r}
+names(dist_matrix)[1:20]
+```
+
+```{r}
+kupu <- 'mai'
+dist_matrix %>% 
+  select(word, !!kupu) %>% 
+  filter(word != kupu) %>%
+  rename(kupu = !!kupu) %>% 
+  arrange(desc(kupu)) %>% 
+  head(5) %>%
+  ggplot(aes(x = reorder(word, kupu), y = kupu, fill = word)) +
+  geom_bar(stat = 'identity') +
+  guides(fill = FALSE) +
+  coord_polar()
+```
+
+```{r}
+library(data.table)
+library(rbokeh)
+library(scales)
+
+dat <- fread('data/tsne.csv')
+dat <- as.data.frame(dat)
+dat$log_count <- log(dat$word_count)
+dat$opacity <- rescale(dat$log_count, c(0.5, 0.9))
+dat$size <- rescale(dat$log_count, c(0.1, 70))
+
+pal <- c('grey', "#41AB5D", "#BD0026")
+dat$col <- gradient_n_pal(pal)(rescale(dat$log_count, c(0,1)))
+
+figure(height = 800, width = 1600, xgrid=F, ygrid=F) %>%
+    ly_points(x_coord, y_coord, data = dat,
+              alpha = opacity, size = size, color = col, hover = word) %>%
+    ly_text(x_coord, y_coord, data = dat, text = word, color = col, font_size='9pt', align='center') %>%
+    tool_wheel_zoom(dimensions = c("width", "height"))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
