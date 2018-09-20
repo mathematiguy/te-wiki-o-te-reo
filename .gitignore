@@ -105,3 +105,6 @@ venv.bak/
 sources/*
 data/*
 models/*
+.Rproj.user
+.RData
+.Rhistory
