@@ -43,7 +43,7 @@ enter:
 
 inspect_variables:
 	@echo IMAGE:     $(IMAGE)
-	@echo UID:      $(UID)
-	@echo GID:     $(GID)
+	@echo UID:       $(UID)
+	@echo GID:       $(GID)
 	@echo RUN:       $(RUN)
 	@echo RUN_IMAGE: $(RUN_IMAGE)
