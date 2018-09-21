@@ -1,2 +1,2 @@
-docker: docker.dragonfly.co.nz/dragonverse-18.04:latest
+docker: ubuntu:18.04
 publish: te-wiki-o-te-reo
