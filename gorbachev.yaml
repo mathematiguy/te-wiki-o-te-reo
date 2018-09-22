@@ -1,2 +1,2 @@
-docker: ubuntu:18.04
+docker: redis:4
 publish: te-wiki-o-te-reo
