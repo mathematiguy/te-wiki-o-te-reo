@@ -1,6 +1,7 @@
 function PinchZoom(selection, zoom){
+    
     if(!zoom) throw "zoom must be passed as a second argument";
-    console.log(navigator.platform)
+    
     var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
     if(!isMac) return;
 

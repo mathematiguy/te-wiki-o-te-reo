@@ -1,24 +1,18 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<svg width="1600" height="1000"></svg>
+<div id="chart"></div>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="index.js"></script>
 <style>
-.svg-container {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%; /* aspect ratio */
-    vertical-align: top;
-    overflow: hidden;
-}
-.svg-content-responsive {
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    left: 0;
+/* Make the chart container fill the page using CSS. */
+#chart {
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
 }
 text {
   font-family: sans-serif;
@@ -26,11 +20,20 @@ text {
 }
 </style>
 <script>
-var svg    = d3.select("svg"),
-    width  = +svg.attr("width"),
-    height = +svg.attr("height");
 
-var tsne = d3.csv("umap.csv", function (error, data) {
+var chartDiv = document.getElementById("chart");
+var svg = d3.select(chartDiv).append("svg");
+
+// Extract the width and height that was computed by CSS.
+var width = chartDiv.clientWidth;
+var height = chartDiv.clientHeight;
+
+// Use the extracted size to set the size of an SVG element.
+svg
+  .attr("width", width)
+  .attr("height", height);
+
+var tsne = d3.csv("tsne.csv", function (error, data) {
   
   x_coord_min = d3.min(data, function(d) { return +d['x_coord']; });
   x_coord_max = d3.max(data, function(d) { return +d['x_coord']; });
@@ -44,10 +47,8 @@ var tsne = d3.csv("umap.csv", function (error, data) {
     d.rank       = +d['rank']
   })
 
-  console.log(data);
-
   var zoom = d3.zoom()
-    .scaleExtent([1 / 10, 100])
+    .scaleExtent([0.6, 100])
     .on("zoom", zoomed);
 
   svg.append("rect")
@@ -74,8 +75,7 @@ var tsne = d3.csv("umap.csv", function (error, data) {
       .attr("cy", function(d) { return d['y_coord']; })
       .attr("r",  function(d) { return 0.1 * Math.log(d['word_count'] + 1)})
       .style("fill", function(d) {
-        return d3.interpolateReds(1 - d['rank'] / data.length)})
-      .on("click", clicked);
+        return d3.interpolateReds(1 - d['rank'] / data.length)});
 
   g.selectAll("text")
     .data(data)
@@ -83,8 +83,7 @@ var tsne = d3.csv("umap.csv", function (error, data) {
       .text(function(d) {return d['word'];})
       .attr('x', function(d) {return d['x_coord'];})
       .attr('y', function(d) {return d['y_coord'];})
-      .style('fill', 'white');
-
+      .style('fill', 'white')
     
 })
 
