@@ -6,20 +6,6 @@
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="index.js"></script>
 <style>
-.svg-container {
-    display: inline-block;
-    position: relative;
-    width: 100%;
-    padding-bottom: 100%; /* aspect ratio */
-    vertical-align: top;
-    overflow: hidden;
-}
-.svg-content-responsive {
-    display: inline-block;
-    position: absolute;
-    top: 10px;
-    left: 0;
-}
 text {
   font-family: sans-serif;
   font-size: 1px;
@@ -30,18 +16,20 @@ var svg    = d3.select("svg"),
     width  = +svg.attr("width"),
     height = +svg.attr("height");
 
-// var simulation = d3.forceSimulation(nodes)
-//     .force('charge', d3.forceManyBody())
-//     .force('center', d3.forceCenter(width / 2, height / 2))
-//     .on('tick', tsne);
-
 var tsne = d3.csv("umap.csv", function (error, data) {
+  
+  x_coord_min = d3.min(data, function(d) { return +d['x_coord']; });
+  x_coord_max = d3.max(data, function(d) { return +d['x_coord']; });
+  y_coord_min = d3.min(data, function(d) { return +d['y_coord']; });
+  y_coord_max = d3.max(data, function(d) { return +d['y_coord']; });
+
   data.forEach(function(d) {
-    d.x_coord    = +d['x_coord'];
-    d.y_coord    = +d['y_coord'];
+    d.x_coord    = (+d['x_coord'] - x_coord_min) / (x_coord_max - x_coord_min) * width;
+    d.y_coord    = (+d['y_coord'] - y_coord_min) / (y_coord_max - y_coord_min) * height;
     d.word_count = +d['word_count'];
     d.rank       = +d['rank']
   })
+
   console.log(data);
 
   var zoom = d3.zoom()
@@ -55,10 +43,6 @@ var tsne = d3.csv("umap.csv", function (error, data) {
       .style("pointer-events", "all")
       .call(zoom)
       .call(PinchZoom, zoom);
-      //.call(d3.zoom()
-      //    .scaleExtent([1 / 2, 100])
-      //    //.translateExtent([[-100, -100], [width + 90, height + 100]])
-      //    .on("zoom", zoomed));
   
   function zoomed() {
     g.attr("transform", d3.event.transform);
@@ -72,8 +56,8 @@ var tsne = d3.csv("umap.csv", function (error, data) {
       .append("a")
       .attr("href", function(d) {"https://maoridictionary.co.nz/search?keywords=" + d['word']})
       .append("circle")
-      .attr("cx", function(d) { return d['x_coord']*100; })
-      .attr("cy", function(d) { return d['y_coord']*100; })
+      .attr("cx", function(d) { return d['x_coord']; })
+      .attr("cy", function(d) { return d['y_coord']; })
       .attr("r",  function(d) { return 0.1 * Math.log(d['word_count'] + 1)})
       .style("fill", function(d) {
         return d3.interpolateReds(1 - d['rank'] / data.length)});
@@ -82,10 +66,11 @@ var tsne = d3.csv("umap.csv", function (error, data) {
     .data(data)
     .enter().append("text")
       .text(function(d) {return d['word'];})
-      .attr('x', function(d) {return d['x_coord']*100;})
-      .attr('y', function(d) {return d['y_coord']*100;})
-      .style('fill', 'white')
-  
+      .attr('x', function(d) {return d['x_coord'];})
+      .attr('y', function(d) {return d['y_coord'];})
+      .style('fill', 'white');
+
+    
 })
 
 </script>
