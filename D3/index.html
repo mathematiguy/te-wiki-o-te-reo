@@ -47,8 +47,6 @@ var tsne = d3.csv("tsne.csv", function (error, data) {
     d.rank       = +d['rank']
   })
 
-  console.log(data);
-
   var zoom = d3.zoom()
     .scaleExtent([0.1, 100])
     .on("zoom", zoomed);
@@ -74,8 +72,7 @@ var tsne = d3.csv("tsne.csv", function (error, data) {
       .attr("cy", function(d) { return d['y_coord']; })
       .attr("r",  function(d) { return 0.2 * Math.log(d['word_count'] + 1)})
       .style("fill", function(d) {
-        return d3.interpolateReds(1 - d['rank'] / data.length)})
-      .on("click", clicked);
+        return d3.interpolateReds(1 - d['rank'] / data.length)});
 
   g.selectAll("text")
     .data(data)
@@ -88,43 +85,6 @@ var tsne = d3.csv("tsne.csv", function (error, data) {
       .attr('x', function(d) {return d['x_coord'];})
       .attr('y', function(d) {return d['y_coord'];})
       .style('fill', 'white');
-
-  function clicked(d) {
-    // from http://jsfiddle.net/EHMM5/1/
-    console.log(d['word'])
-    var x, y, k;
-          
-    x = d3.select(this).attr("cx");
-    y = d3.select(this).attr("cy");
-
-    console.log({x:x, y:y});
-
-    var t = getTransformation(d3.select('g').attr("transform"));
-
-    console.log(t);
-
-    t.translateX = Math.abs(t.translateX / t.scaleX);
-    t.translateY = Math.abs(t.translateY / t.scaleY);
-
-    console.log({
-      scaled_x: width / t.scaleX, 
-      scaled_y: height / t.scaleY
-    })
-
-    var x_target = -x * t.scaleX;
-    var y_target = -y * t.scaleY;
-
-    console.log({
-      x_target: x_target, 
-      y_target: y_target
-    });
-
-    svg.selectAll("g")
-      .transition()
-        .duration(750)
-        .attr("transform", 
-          "translate(" + x_target + "," + y_target + ") scale(" + t.scaleX + ")");
-  }
     
 })
 
