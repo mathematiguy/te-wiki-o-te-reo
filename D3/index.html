@@ -54,7 +54,7 @@ var body = d3.select('body')
 body.append('input')
     .attr('type','text')
     .attr('name','textInput')
-    .attr('placeholder','Select kupu:')
+    .attr('placeholder','Select kupu:');
 
 // Use the extracted size to set the size of an SVG element.
 svg
@@ -135,7 +135,7 @@ var tsne = d3.csv("tsne.csv", function (error, data) {
               "translate(" + x_target + "," + y_target + ") scale(" + t.scaleX + ")");
 
   }
-    
+
 })
 
 </script>
