@@ -64,7 +64,7 @@ var tsne = d3.csv("tsne.csv", function (error, data) {
   }
 
   var g = svg.append("g");
-  var ranks = function(d) {d["rank"]};
+  var ranks = function(d) { return d["rank"] };
   
   g.selectAll("circle")
       .data(data).enter()
