@@ -6,10 +6,9 @@ RUN ?= docker run -it --rm $(PORT) -v $$(pwd):/work -w /work -u $(UID):$(GID)
 RUN_IMAGE ?= $(RUN) $(IMAGE):$(TAG)
 PORT ?=
 
-web_server: PAGE=d3-zoom
 web_server: PORT=-p 8000:8000
 web_server:
-	(cd D3/$(PAGE) && $(RUN_IMAGE) python3 -m http.server)
+	(cd D3 && $(RUN_IMAGE) python3 -m http.server)
 
 JUPYTER_PASSWORD ?= jupyter
 JUPYTER_PORT ?= 8888
