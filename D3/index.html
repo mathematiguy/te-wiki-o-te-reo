@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<div id="chart"></div>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
-<script src="index.js"></script>
+
 <style>
 /* Make the chart container fill the page using CSS. */
 #chart {
@@ -13,13 +12,34 @@
   right: 0px;
   top: 0px;
   bottom: 0px;
+  z-index: -1;
 }
 text {
   font-family: sans-serif;
   font-size: 1px;
   text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
 }
+input {
+  border: 1px 
+  dotted #ccc; 
+  background: black;
+  font-family: sans-serif; 
+  padding: 10px 20px;
+  font-size: 18px;
+  margin: 20px 10px 20px 0; 
+  color: white;
+}
+input:focus { 
+  background-color:grey; 
+  outline: none;
+}
 </style>
+
+<body>
+  <div id="chart"></div>
+</body>
+
+<script src="index.js"></script>
 <script>
 
 var chartDiv = document.getElementById("chart");
@@ -28,6 +48,13 @@ var svg = d3.select(chartDiv).append("svg");
 // Extract the width and height that was computed by CSS.
 var width = chartDiv.clientWidth;
 var height = chartDiv.clientHeight;
+
+var body = d3.select('body')
+
+body.append('input')
+    .attr('type','text')
+    .attr('name','textInput')
+    .attr('placeholder','Select kupu:')
 
 // Use the extracted size to set the size of an SVG element.
 svg
@@ -47,8 +74,6 @@ var tsne = d3.csv("tsne.csv", function (error, data) {
     d.word_count = +d['word_count'];
     d.rank       = +d['rank']
   })
-
-  console.log(data);
 
   var zoom = d3.zoom()
     .scaleExtent([0.1, 100])
@@ -92,39 +117,23 @@ var tsne = d3.csv("tsne.csv", function (error, data) {
 
   function clicked(d) {
     // from http://jsfiddle.net/EHMM5/1/
-    console.log(d['word'])
     var x, y, k;
           
     x = d3.select(this).attr("cx");
     y = d3.select(this).attr("cy");
 
-    console.log({x:x, y:y});
+    var t = getTransformation(
+      d3.select('g').attr("transform"));
 
-    var t = getTransformation(d3.select('g').attr("transform"));
-
-    console.log(t);
-
-    t.translateX = Math.abs(t.translateX / t.scaleX);
-    t.translateY = Math.abs(t.translateY / t.scaleY);
-
-    console.log({
-      scaled_x: width / t.scaleX, 
-      scaled_y: height / t.scaleY
-    })
-
-    var x_target = -x * t.scaleX;
-    var y_target = -y * t.scaleY;
-
-    console.log({
-      x_target: x_target, 
-      y_target: y_target
-    });
+    var x_target = -x * t.scaleX + width / 2;
+    var y_target = -y * t.scaleY + height / 2;
 
     svg.selectAll("g")
       .transition()
         .duration(750)
         .attr("transform", 
-          "translate(" + x_target + "," + y_target + ") scale(" + t.scaleX + ")");
+              "translate(" + x_target + "," + y_target + ") scale(" + t.scaleX + ")");
+
   }
     
 })
