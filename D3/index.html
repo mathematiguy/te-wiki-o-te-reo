@@ -107,7 +107,7 @@ var tsne = d3.csv("tsne.csv", function (error, data) {
     .data(data)
     .enter()
     .append("a")
-      .attr("xlink:href", function(d) {return "http://maoridictionary.co.nz/search?keywords=" + d['word'].replace("_", "+")})
+      .attr("xlink:href", function(d) {return "https://maoridictionary.co.nz/search?keywords=" + d['word'].replace("_", "+")})
       .attr("target", "_blank")
     .append("text")
       .text(function(d) {return d['word'];})
