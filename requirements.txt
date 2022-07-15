@@ -27,7 +27,7 @@ dask==0.19.1
 decorator==4.3.0
 defusedxml==0.5.0
 dill==0.2.8.2
-distributed==1.23.1
+distributed==2021.10.0
 docutils==0.14
 entrypoints==0.2.3
 fastcache==1.0.2
